@@ -42,3 +42,4 @@ if __name__ == '__main__':
     title,zw = c.get_details(urll[0])
     print(title)
     print(zw)
+	#蓝冰
