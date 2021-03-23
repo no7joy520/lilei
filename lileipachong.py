@@ -57,6 +57,7 @@ def upload_data(dr,title,zw):
 
 
 if __name__ == '__main__':
+    print('start')
     chrome_options = Options()
 
     chrome_options.add_argument('--no-sandbox')
@@ -72,6 +73,7 @@ if __name__ == '__main__':
     for i in spider_list:
         c = i()
         url_1 = c.get_subsurl()
+        print('url_1')
         if url_1:
             for url in url_1:
                 title, zw = c.get_details(url)
