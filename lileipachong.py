@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from time import sleep
 import re
-from spider import diyizhixiao,zhixiaozhuanye,zhixiaobaodao
+from spider import diyizhixiao,zhixiaozhuanye,zhixiaobaodao,zhixiaotoutiao
 import datetime
 
 
@@ -76,6 +76,8 @@ if __name__ == '__main__':
     spider_list = [
         diyizhixiao,
         # zhixiaozhuanye,
+        zhixiaobaodao,
+        zhixiaotoutiao,
                    ]
     for i in spider_list:
         c = i.spider(dt)
