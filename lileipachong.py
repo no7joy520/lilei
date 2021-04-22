@@ -3,12 +3,14 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from time import sleep
 import re
-from spider import diyizhixiao
+from spider import diyizhixiao,zhixiaozhuanye,zhixiaobaodao
+import datetime
+
 
 pattern1 = re.compile('<div class="biu_xw_title">([\s\S]*?)</div>')
 pattern2 = re.compile('<div class="biu_xw_body">[\s\S]*?<div class="fx">')
 pattern3 = re.compile('<h1>(.*?)</h1>')
-headers = {"User-Agent" : "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko"}
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko"}
 
 
 def login(dr):
@@ -20,9 +22,9 @@ def login(dr):
     deng.send_keys("zxjzd")
     mi.send_keys("zxjzd")
     dian.click()
- 
 
-def upload_data(dr,title,zw):
+
+def upload_data(dr, title, zw):
     dr.switch_to_default_content()  # 切换回主页面
     dr.find_element_by_xpath('//*[@id="menu_news"]/li[1]/a').click()  # 点击发布信息
     dr.switch_to_frame("main")  # 切换到选择发布配置的子页面
@@ -58,6 +60,8 @@ def upload_data(dr,title,zw):
 
 if __name__ == '__main__':
     print('start')
+    dt = datetime.datetime.now().strftime('%Y-%m-%d')
+
     chrome_options = Options()
 
     chrome_options.add_argument('--no-sandbox')
@@ -69,15 +73,24 @@ if __name__ == '__main__':
     driver = webdriver.Chrome(chrome_options=chrome_options)
     login(driver)
 
-    spider_list = [diyizhixiao.diyi]
+    spider_list = [
+        diyizhixiao,
+        # zhixiaozhuanye,
+                   ]
     for i in spider_list:
-        c = i()
+        c = i.spider(dt)
         url_1 = c.get_subsurl()
-        print('url_1')
+        print(i,url_1)
         if url_1:
             for url in url_1:
-                title, zw = c.get_details(url)
-                upload_data(driver, title, zw)
+                try:
+                    title, zw = c.get_details(url)
+                except Exception as e:
+                    print(e)
+                    continue
+                # print(title,zw)
+                if title and zw != "":
+                    upload_data(driver, title, zw)
 
     driver.quit()
-	print('end')
+    print('end')
