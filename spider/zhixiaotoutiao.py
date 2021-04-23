@@ -50,6 +50,7 @@ class spider():
 
         content = html_obj.xpath('//div[@class="subpage_main"]//ul[@class="news_neirong"]/li[4]')
         title = html_obj.xpath('//div[@class="subpage_main"]//ul[@class="news_neirong"]/li[1]/h4/text()')
+
         if sj[0][3:14].strip() != dt:
             return "",""
 
@@ -63,3 +64,4 @@ if __name__ == '__main__':
     title, zw = c.get_details("https://www.dstoutiao.com/html/ds/zxfull/2021/0422/98886.html")
     print(title)
     print(zw)
+    print("meishuchu")

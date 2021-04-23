@@ -1,7 +1,8 @@
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from time import sleep
+# from time import sleep
+import time
 import re
 from spider import diyizhixiao,zhixiaozhuanye,zhixiaobaodao,zhixiaotoutiao
 import datetime
@@ -10,11 +11,25 @@ import datetime
 pattern1 = re.compile('<div class="biu_xw_title">([\s\S]*?)</div>')
 pattern2 = re.compile('<div class="biu_xw_body">[\s\S]*?<div class="fx">')
 pattern3 = re.compile('<h1>(.*?)</h1>')
+overtime = 1000
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko"}
+
+def init_dr():
+    chrome_options = Options()
+
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument('blink-settings=imagesEnabled=false')
+
+    chrome_options.add_argument('--disable-gpu')
+    driver = webdriver.Chrome(chrome_options=chrome_options)
+
+    return driver
 
 
 def login(dr):
-    dr.implicitly_wait(100)
+    dr.implicitly_wait(2000)
     dr.get("http://xiaokenet.cn/admin_login.php?file=login")
     deng = dr.find_element_by_xpath('//*[@id="username"]')
     mi = dr.find_element_by_xpath('//*[@id="password"]')
@@ -25,6 +40,7 @@ def login(dr):
 
 
 def upload_data(dr, title, zw):
+
     dr.switch_to_default_content()  # 切换回主页面
     dr.find_element_by_xpath('//*[@id="menu_news"]/li[1]/a').click()  # 点击发布信息
     dr.switch_to_frame("main")  # 切换到选择发布配置的子页面
@@ -46,7 +62,7 @@ def upload_data(dr, title, zw):
     dr.find_element_by_xpath('//*[@id="listorder"]').send_keys("60")  # 填写排序
     dr.find_element_by_xpath('//*[@id="cpcontainer"]/form/table/tbody[3]/tr/td[2]/input[1]').click()  # 提交
 
-    sleep(5)
+    time.sleep(5)
     dr.find_element_by_xpath("//a[text()='{}']".format(title)).click()  # 再次提交
     dr.switch_to_default_content()  # 再次提交
     dr.switch_to_frame("main")  # 再次提交
@@ -58,19 +74,13 @@ def upload_data(dr, title, zw):
     dr.find_element_by_xpath('//*[@id="submit"]').click()  # 提交
 
 
+
+
 if __name__ == '__main__':
     print('start')
     dt = datetime.datetime.now().strftime('%Y-%m-%d')
 
-    chrome_options = Options()
-
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument('blink-settings=imagesEnabled=false')
-
-    chrome_options.add_argument('--disable-gpu')
-    driver = webdriver.Chrome(chrome_options=chrome_options)
+    driver = init_dr()
     login(driver)
 
     spider_list = [
@@ -91,8 +101,19 @@ if __name__ == '__main__':
                     print(e)
                     continue
                 # print(title,zw)
+
                 if title and zw != "":
-                    upload_data(driver, title, zw)
+                    print(title, "即将上传")
+                    try:
+                        upload_data(driver, title, zw)
+                    except Exception as e:
+                        print(e)
+                        driver.quit()
+                        driver = init_dr()
+                        login(driver)
+                        continue
+
+
 
     driver.quit()
     print('end')
