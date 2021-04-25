@@ -6,6 +6,7 @@ import time
 import re
 from spider import diyizhixiao,zhixiaozhuanye,zhixiaobaodao,zhixiaotoutiao
 import datetime
+import os
 
 
 pattern1 = re.compile('<div class="biu_xw_title">([\s\S]*?)</div>')
@@ -110,6 +111,7 @@ if __name__ == '__main__':
                     except Exception as e:
                         print(e)
                         driver.quit()
+                        os.system("ps -ef | grep 'nginx' | grep -v grep | awk '{print $2}' | xargs kill -s SIGINT")
                         driver = init_dr()
                         login(driver)
                         continue
