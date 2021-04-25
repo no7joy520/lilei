@@ -77,8 +77,9 @@ def upload_data(dr, title, zw):
 
 
 if __name__ == '__main__':
-    print('start')
-    dt = datetime.datetime.now().strftime('%Y-%m-%d')
+    start_now = datetime.datetime.now()
+    print(start_now.strftime('%Y-%m-%d %H:%M:%S'),'start')
+    dt = start_now.strftime('%Y-%m-%d')
 
     driver = init_dr()
     login(driver)
@@ -116,4 +117,5 @@ if __name__ == '__main__':
 
 
     driver.quit()
-    print('end')
+    print(datetime.datetime.now(),'end')
+    print("耗时",datetime.datetime.now()-start_now)
