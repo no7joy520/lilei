@@ -42,7 +42,7 @@ class spider():
 
 
 if __name__ == '__main__':
-    c = spider()
+    c = spider(dt="2022-04-07")
     urll = c.get_subsurl()
     print(urll)
     title, zw = c.get_details(urll[0])

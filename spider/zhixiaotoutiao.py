@@ -58,10 +58,10 @@ class spider():
 
 
 if __name__ == '__main__':
-    c = spider(dt="2021-04-20")
+    c = spider(dt="2022-04-07")
     urll = c.get_subsurl()
-    # print(urll)
-    title, zw = c.get_details("https://www.dstoutiao.com/html/ds/zxfull/2021/0422/98886.html")
+    print(urll)
+    title, zw = c.get_details(urll[0])
     print(title)
     print(zw)
     print("meishuchu")
