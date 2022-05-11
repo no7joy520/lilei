@@ -31,19 +31,26 @@ def init_dr():
 
 def login(dr):
     dr.implicitly_wait(2000)
-    dr.get("http://xiaokenet.cn/admin_login.php?file=login")
+    # dr.get("https://www.xiaokenet.cn/admin_login.php")
+    dr.get("https://www.zhixiaojie.cn/admin_login.php")
     deng = dr.find_element_by_xpath('//*[@id="username"]')
     mi = dr.find_element_by_xpath('//*[@id="password"]')
     dian = dr.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[2]/form/p[5]/input[2]')
-    deng.send_keys("zxjzd")
-    mi.send_keys("zxjzd")
+    deng.send_keys("admin")
+    mi.send_keys("bjtxj0987")
     dian.click()
+
+
+
+
+
 
 
 def upload_data(dr, title, zw):
 
     dr.switch_to_default_content()  # 切换回主页面
-    dr.find_element_by_xpath('//*[@id="menu_news"]/li[1]/a').click()  # 点击发布信息
+    dr.find_element_by_xpath('//*[@id="header_news"]').click()  # 点击信息资讯
+    dr.find_element_by_xpath('//*[@id="menu_news"]/li[2]/a').click()  # 点击发布信息
     dr.switch_to_frame("main")  # 切换到选择发布配置的子页面
 
     # driver.switch_to_default_content()
@@ -84,37 +91,38 @@ if __name__ == '__main__':
 
     driver = init_dr()
     login(driver)
+    upload_data(driver, "tesy", "testyjjjj")
 
-    spider_list = [
-        diyizhixiao,
-        # zhixiaozhuanye,
-        zhixiaobaodao,
-        zhixiaotoutiao,
-                   ]
-    for i in spider_list:
-        c = i.spider(dt)
-        url_1 = c.get_subsurl()
-        print(i,url_1)
-        if url_1:
-            for url in url_1:
-                try:
-                    title, zw = c.get_details(url)
-                except Exception as e:
-                    print(e)
-                    continue
-                # print(title,zw)
-
-                if title and zw != "":
-                    print(title, "即将上传")
-                    try:
-                        upload_data(driver, title, zw)
-                    except Exception as e:
-                        print(e)
-                        driver.quit()
-                        os.system("ps -ef | grep 'nginx' | grep -v grep | awk '{print $2}' | xargs kill -s SIGINT")
-                        driver = init_dr()
-                        login(driver)
-                        continue
+    # spider_list = [
+    #     diyizhixiao,
+    #     # zhixiaozhuanye,
+    #     zhixiaobaodao,
+    #     zhixiaotoutiao,
+    #                ]
+    # for i in spider_list:
+    #     c = i.spider(dt)
+    #     url_1 = c.get_subsurl()
+    #     print(i,url_1)
+    #     if url_1:
+    #         for url in url_1:
+    #             try:
+    #                 title, zw = c.get_details(url)
+    #             except Exception as e:
+    #                 print(e)
+    #                 continue
+    #             # print(title,zw)
+    #
+    #             if title and zw != "":
+    #                 print(title, "即将上传")
+    #                 try:
+    #                     upload_data(driver, title, zw)
+    #                 except Exception as e:
+    #                     print(e)
+    #                     driver.quit()
+    #                     # os.system("ps -ef | grep 'chromedriver' | grep -v grep | awk '{print $2}' | xargs kill -s SIGINT")
+    #                     driver = init_dr()
+    #                     login(driver)
+    #                     continue
 
 
 
