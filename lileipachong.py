@@ -30,7 +30,7 @@ def init_dr():
 
 
 def login(dr):
-    dr.implicitly_wait(2000)
+    dr.implicitly_wait(10)
     # dr.get("https://www.xiaokenet.cn/admin_login.php")
     dr.get("https://www.zhixiaojie.cn/admin_login.php")
     deng = dr.find_element_by_xpath('//*[@id="username"]')
