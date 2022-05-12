@@ -1,6 +1,9 @@
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
 # from time import sleep
 import time
 import re
@@ -76,7 +79,11 @@ def upload_data(dr, title, zw):
     dr.switch_to_frame("main")  # 再次提交
     dr.find_element_by_xpath('//*[@id="cpcontainer"]/form/table/tbody[3]/tr/td[2]/input[4]').click()  # 再次提交
     # html = driver.page_source
-    dr.find_element_by_xpath("//a[text()='{}']/../preceding-sibling::*[2]".format(title)).click()  # 选中刚才发布的新闻
+    # locator = dr.find_element_by_xpath("//a[text()='{}']/../preceding-sibling::*[2]".format(title))
+    locator = (By.XPATH, "//a[text()='{}']/../preceding-sibling::*[2]".format(title))
+    WebDriverWait(driver, 6).until(EC.element_to_be_clickable(locator))
+    dr.find_element(*locator).click()# 选中刚才发布的新闻
+
 
     dr.find_element_by_xpath('//*[@id="cpcontainer"]/table/tbody/tr[17]/td/div[2]/input[3]').click()  # 选择推荐
     dr.find_element_by_xpath('//*[@id="submit"]').click()  # 提交
