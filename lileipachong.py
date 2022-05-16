@@ -24,12 +24,12 @@ headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:1
 def init_dr():
     chrome_options = Options()
 
-    chrome_options.add_argument('--no-sandbox')
-    chrome_options.add_argument('--disable-dev-shm-usage')
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument('blink-settings=imagesEnabled=false')
-
-    chrome_options.add_argument('--disable-gpu')
+    # chrome_options.add_argument('--no-sandbox')
+    # chrome_options.add_argument('--disable-dev-shm-usage')
+    # chrome_options.add_argument("--headless")
+    # chrome_options.add_argument('blink-settings=imagesEnabled=false')
+    #
+    # chrome_options.add_argument('--disable-gpu')
     driver = webdriver.Chrome(chrome_options=chrome_options)
 
     return driver
@@ -80,6 +80,7 @@ def upload_data(dr, title, zw):
     dr.find_element_by_xpath("//a[text()='{}']".format(title)).click()  # 再次提交
     dr.switch_to_default_content()  # 再次提交
     dr.switch_to_frame("main")  # 再次提交
+    dr.find_element_by_xpath('//*[@id="cpcontainer"]/form/table/tbody[1]/tr[8]/td[2]/input').send_keys("网络")
     dr.find_element_by_xpath('//*[@id="cpcontainer"]/form/table/tbody[3]/tr/td[2]/input[4]').click()  # 再次提交
     time.sleep(5)
     # html = driver.page_source
@@ -102,6 +103,8 @@ if __name__ == '__main__':
 
     driver = init_dr()
     login(driver)
+
+
     # upload_data(driver, "tesy", "testyjjjj")
     # from spider import yyztt
     #

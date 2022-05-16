@@ -31,6 +31,7 @@ class spider():
         pattern2 = re.compile('<div class="biu_xw_body">[\s\S]*?<div class="fx">')
         pattern3 = re.compile('<h1>(.*?)</h1>')
         pattern4 = re.compile('(【.*?】)([\s\S]*)(【.*?】)')
+        pattern5 = re.compile('<div class="biu_xw_body">([\s\S]*?)<p>')
 
         html = requests.get(url=base_url + url, headers=self.headers,
                             timeout=31).content.decode('utf8')
@@ -38,6 +39,11 @@ class spider():
         title = pattern3.findall(pattern1.findall(html)[0])[0]
         zw = pattern2.findall(html)[0]
         zw = pattern4.sub(r'【直销界】\2', zw)
+        try:
+            zw1 = pattern5.findall(zw)[0]
+        except Exception as e:
+            zw1 = ""
+        zw = zw.replace(zw1,"")
         return title, zw
 
 
