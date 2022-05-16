@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -7,7 +9,8 @@ from selenium.webdriver.common.by import By
 # from time import sleep
 import time
 import re
-from spider import diyizhixiao,zhixiaozhuanye,zhixiaobaodao,zhixiaotoutiao
+from spider import diyizhixiao,zhixiaozhuanye,\
+    zhixiaobaodao,zhixiaotoutiao,weisbd,yyztt
 import datetime
 import os
 
@@ -78,6 +81,7 @@ def upload_data(dr, title, zw):
     dr.switch_to_default_content()  # 再次提交
     dr.switch_to_frame("main")  # 再次提交
     dr.find_element_by_xpath('//*[@id="cpcontainer"]/form/table/tbody[3]/tr/td[2]/input[4]').click()  # 再次提交
+    time.sleep(5)
     # html = driver.page_source
     # locator = dr.find_element_by_xpath("//a[text()='{}']/../preceding-sibling::*[2]".format(title))
     locator = (By.XPATH, "//a[text()='{}']/../preceding-sibling::*[2]".format(title))
@@ -98,41 +102,48 @@ if __name__ == '__main__':
 
     driver = init_dr()
     login(driver)
-    upload_data(driver, "tesy", "testyjjjj")
-
-    # spider_list = [
-    #     diyizhixiao,
-    #     # zhixiaozhuanye,
-    #     zhixiaobaodao,
-    #     zhixiaotoutiao,
-    #                ]
-    # for i in spider_list:
-    #     c = i.spider(dt)
-    #     url_1 = c.get_subsurl()
-    #     print(i,url_1)
-    #     if url_1:
-    #         for url in url_1:
-    #             try:
-    #                 title, zw = c.get_details(url)
-    #             except Exception as e:
-    #                 print(e)
-    #                 continue
-    #             # print(title,zw)
+    # upload_data(driver, "tesy", "testyjjjj")
+    # from spider import yyztt
     #
-    #             if title and zw != "":
-    #                 print(title, "即将上传")
-    #                 try:
-    #                     upload_data(driver, title, zw)
-    #                 except Exception as e:
-    #                     print(e)
-    #                     driver.quit()
-    #                     # os.system("ps -ef | grep 'chromedriver' | grep -v grep | awk '{print $2}' | xargs kill -s SIGINT")
-    #                     driver = init_dr()
-    #                     login(driver)
-    #                     continue
+    # c = yyztt.spider(dt=dt)
+    # title, zw = c.get_details("http://www.yitb.com/index.php/viewnews-8707")
+    # upload_data(driver, title, zw)
+
+    spider_list = [
+        diyizhixiao,
+        # zhixiaozhuanye,
+        zhixiaobaodao,
+        # zhixiaotoutiao,
+        weisbd,
+        yyztt
+                   ]
+    for i in spider_list:
+        c = i.spider(dt)
+        url_1 = c.get_subsurl()
+        print(i,url_1)
+        if url_1:
+            for url in url_1:
+                try:
+                    title, zw = c.get_details(url)
+                except Exception as e:
+                    print(e)
+                    continue
+                # print(title,zw)
+
+                if title and zw != "":
+                    print(title, "即将上传")
+                    try:
+                        upload_data(driver, title, zw)
+                    except Exception as e:
+                        print(e)
+                        driver.quit()
+                        # os.system("ps -ef | grep 'chromedriver' | grep -v grep | awk '{print $2}' | xargs kill -s SIGINT")
+                        driver = init_dr()
+                        login(driver)
+                        continue
 
 
 
     driver.quit()
     print(datetime.datetime.now(),'end')
-    print("耗时",datetime.datetime.now()-start_now)
+    print("count time",datetime.datetime.now()-start_now)
