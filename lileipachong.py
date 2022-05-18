@@ -99,7 +99,8 @@ def upload_data(dr, title, zw):
 if __name__ == '__main__':
     start_now = datetime.datetime.now()
     print(start_now.strftime('%Y-%m-%d %H:%M:%S'),'start')
-    dt = start_now.strftime('%Y-%m-%d')
+    # dt = start_now.strftime('%Y-%m-%d')
+    dt = start_now.strftime('2022-05-17')
 
     driver = init_dr()
     login(driver)
@@ -134,7 +135,8 @@ if __name__ == '__main__':
                 # print(title,zw)
 
                 if title and zw != "":
-                    print(title, "即将上传")
+                    # print(title, "即将上传")
+                    print(title, "reday upload")
                     try:
                         upload_data(driver, title, zw)
                     except Exception as e:
